@@ -1,0 +1,23 @@
+﻿@model JobApplication
+
+@{
+    ViewData["Title"] = "Form";
+}
+
+@{ JobOffer offer = WebApp.Controllers.JobOfferController._jobOffers.FirstOrDefault(o => o.Id == Model.OfferId);}
+
+<h2>Apply for: @Html.ActionLink(offer.JobTitle, "Details", "JobOffer", new { id = offer.Id })</h2>
+
+@using (Html.BeginForm("SaveForm", "JobApplication", Model))
+{
+    <p>First Name</p>
+    @Html.TextBoxFor(m => m.FirstName)
+    <p>Last Name</p>
+    @Html.TextBoxFor(m => m.LastName)
+    <p>Contact Email</p>
+    @Html.TextBoxFor(m => m.EmailAddress)
+    <p>Contact Phone</p>
+    @Html.TextBoxFor(m => m.PhoneNumber)
+    <input type="submit" value="Submit application" />
+}
+

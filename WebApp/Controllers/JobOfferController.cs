@@ -22,7 +22,7 @@ namespace WebApp.Controllers
             return View(offer);
         }
 
-        private static List<JobOffer> _jobOffers = new List<JobOffer>
+        public static List<JobOffer> _jobOffers = new List<JobOffer>
         {
             new JobOffer{Id = 1, JobTitle = "Backend Developer" },
             new JobOffer{Id = 2, JobTitle = "Frontend Developer"},
