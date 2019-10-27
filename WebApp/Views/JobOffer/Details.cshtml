@@ -3,8 +3,24 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
-<p>Id of job: @Model.Id, Name of Job: @Model.JobTitle</p>
-<p>Apply for this job (SOON)</p>
-@Html.ActionLink("Return to job index", "Index")
-
+<h1>@Model.JobTitle</h1>
+<div>
+    <p>@Model.JobDescription</p>
+    <p><b>Company: </b>@Model.Company</p>
+    <p><b>Location: </b>@Model.Location</p>
+    <p><b>Salary: </b>@Model.Salary PLN</p>
+    <p><b>Created: </b>@Model.CreationDate.ToString()</p>
+</div>
+<div>
+    @using (Html.BeginForm())
+    {
+        <input type="button" name="applyButton" value="Apply Now" />
+        <input type="button" name="editButton" value="Edit" />
+        <br>
+        <input type="button" name="deleteButton" value="Delete" />
+    }
+</div>
+<hr/>
+<div>
+    @Html.ActionLink("Return to job index", "Index")
+</div>
