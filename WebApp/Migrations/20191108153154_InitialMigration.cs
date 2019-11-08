@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApp.Migrations
@@ -26,11 +27,24 @@ namespace WebApp.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    JobTitle = table.Column<string>(nullable: true)
+                    JobTitle = table.Column<string>(nullable: true),
+                    JobDescription = table.Column<string>(nullable: true),
+                    CompanyId = table.Column<int>(nullable: true),
+                    Location = table.Column<string>(nullable: true),
+                    SalaryFrom = table.Column<int>(nullable: false),
+                    SalaryTo = table.Column<int>(nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false),
+                    ValidUntil = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_JobOffers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_JobOffers_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -63,18 +77,23 @@ namespace WebApp.Migrations
                 name: "IX_JobApplications_JobOfferId",
                 table: "JobApplications",
                 column: "JobOfferId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobOffers_CompanyId",
+                table: "JobOffers",
+                column: "CompanyId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Companies");
-
-            migrationBuilder.DropTable(
                 name: "JobApplications");
 
             migrationBuilder.DropTable(
                 name: "JobOffers");
+
+            migrationBuilder.DropTable(
+                name: "Companies");
         }
     }
 }

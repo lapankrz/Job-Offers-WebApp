@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebApp.EntityFramework;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -10,25 +12,30 @@ namespace WebApp.Controllers
     [Route("joboffer")]
     public class JobOfferController : Controller
     {
+        public DataContext context;
+        public JobOfferController(DataContext dataContext)
+        {
+            context = dataContext;
+        }
+        /*
+        [Route("index")]
+        public async Task<ActionResult> Create()
+        {
+            var offers = context.JobOffers.ToList();
+            return View(offers);
+        }
+        */
         [Route("index")]
         public IActionResult Index()
         {
-            return View(_jobOffers);
+            return View(context.JobOffers.ToList());
         }
+        
 
         public IActionResult Details(int id)
         {
-            var offer = _jobOffers.FirstOrDefault(o => o.Id == id);
+            var offer = context.JobOffers.Include(o => o.Company).Include(o => o.JobApplications).FirstOrDefault(o => o.Id == id);
             return View(offer);
         }
-
-        public static List<JobOffer> _jobOffers = new List<JobOffer>
-        {
-            new JobOffer{Id = 1, JobTitle = "Backend Developer" },
-            new JobOffer{Id = 2, JobTitle = "Frontend Developer"},
-            new JobOffer{Id = 3, JobTitle = "Manager"},
-            new JobOffer{Id = 4, JobTitle = "Teacher"},
-            new JobOffer{Id = 5, JobTitle = "Cook"}
-        };
     }
 }

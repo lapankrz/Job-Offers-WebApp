@@ -12,8 +12,10 @@ namespace WebApp.Models
         public string JobDescription { get; set; }
         public Company Company { get; set; }
         public string Location { get; set; }
-        public int Salary { get; set; }
+        public int SalaryFrom { get; set; }
+        public int SalaryTo { get; set; }
         public DateTime CreationDate { get; set; }
+        public DateTime ValidUntil { get; set; }
         public List<JobApplication> JobApplications { get; set; } = new List<JobApplication>();
     }
 }

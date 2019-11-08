@@ -1,23 +1,26 @@
-﻿@model JobApplication
+﻿@model WebApp.Models.JobOffer
 
 @{
     ViewData["Title"] = "Form";
 }
 
-@{ JobOffer offer = WebApp.Controllers.JobOfferController._jobOffers.FirstOrDefault(o => o.Id == Model.OfferId);}
+<h2>Apply for: @Html.ActionLink(Model.JobTitle, "Details", "JobOffer", new { id = Model.Id })</h2>
 
-<h2>Apply for: @Html.ActionLink(offer.JobTitle, "Details", "JobOffer", new { id = offer.Id })</h2>
+@{var application = new JobApplication(); application.OfferId = Model.Id; }
 
-@using (Html.BeginForm("SaveForm", "JobApplication", Model))
+@using (Html.BeginForm("SaveForm", "JobApplication"))
 {
+    @Html.HiddenFor(m => application.OfferId, new { @Value = Model.Id })
     <p>First Name</p>
-    @Html.TextBoxFor(m => m.FirstName)
+    @Html.TextBoxFor(m => application.FirstName)
     <p>Last Name</p>
-    @Html.TextBoxFor(m => m.LastName)
+    @Html.TextBoxFor(m => application.LastName)
     <p>Contact Email</p>
-    @Html.TextBoxFor(m => m.EmailAddress)
+    @Html.TextBoxFor(m => application.EmailAddress)
     <p>Contact Phone</p>
-    @Html.TextBoxFor(m => m.PhoneNumber)
+    @Html.TextBoxFor(m => application.PhoneNumber)
+    <br />
+    <br />
     <input type="submit" value="Submit application" />
 }
 

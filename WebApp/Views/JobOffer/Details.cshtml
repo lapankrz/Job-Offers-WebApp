@@ -6,9 +6,9 @@
 <h2>@Model.JobTitle</h2>
 <div>
     <p>@Model.JobDescription</p>
-    <p><b>Company: </b>@Model.Company</p>
+    <p><b>Company: </b>@Model.Company.Name</p>
     <p><b>Location: </b>@Model.Location</p>
-    <p><b>Salary: </b>@Model.Salary PLN</p>
+    <p><b>Salary: </b>@Model.SalaryFrom - @Model.SalaryTo PLN</p>
     <p><b>Created: </b>@Model.CreationDate.ToString()</p>
 </div>
 <div>

@@ -10,7 +10,7 @@ using WebApp.EntityFramework;
 namespace WebApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191027134010_InitialMigration")]
+    [Migration("20191108153154_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,9 +69,25 @@ namespace WebApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CompanyId");
+
+                    b.Property<DateTime>("CreationDate");
+
+                    b.Property<string>("JobDescription");
+
                     b.Property<string>("JobTitle");
 
+                    b.Property<string>("Location");
+
+                    b.Property<int>("SalaryFrom");
+
+                    b.Property<int>("SalaryTo");
+
+                    b.Property<DateTime>("ValidUntil");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("JobOffers");
                 });
@@ -81,6 +97,13 @@ namespace WebApp.Migrations
                     b.HasOne("WebApp.Models.JobOffer")
                         .WithMany("JobApplications")
                         .HasForeignKey("JobOfferId");
+                });
+
+            modelBuilder.Entity("WebApp.Models.JobOffer", b =>
+                {
+                    b.HasOne("WebApp.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
                 });
 #pragma warning restore 612, 618
         }
