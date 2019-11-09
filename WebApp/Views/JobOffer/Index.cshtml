@@ -11,3 +11,5 @@
         <li>@Html.ActionLink(offer.JobTitle, "Details", new { id = offer.Id })</li>
     }
 </ul>
+<br />
+<input type="button" name="addJobOffer" value="Add Job Offer" onclick="location.href='@Url.Action("AddJobOffer", "JobOffer")'" />

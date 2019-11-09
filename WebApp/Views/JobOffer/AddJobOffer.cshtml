@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewData["Title"] = "AddJobOffer";
+}
+
+
+<h2>Add Job Offer</h2>
+
+@{ var offer = new JobOffer(); offer.ValidUntil = DateTime.Now; }
+
+@using (Html.BeginForm("SaveJobOffer", "JobOffer"))
+{
+    <p>Job Title</p>
+    @Html.ValidationSummary(true, "")
+    @Html.TextBoxFor(m => offer.JobTitle)
+    @Html.ValidationMessageFor(m => offer.JobTitle)
+    <p>Description</p>
+    @Html.TextBoxFor(m => offer.JobDescription)
+    <p>Company ID</p>
+    @Html.TextBoxFor(m => offer.Id)
+    @Html.ValidationMessageFor(m => offer.Company)
+    <p>Location</p>
+    @Html.TextBoxFor(m => offer.Location)
+    @Html.ValidationMessageFor(m => offer.Location)
+    <p>Salary from:</p>
+    @Html.TextBoxFor(m => offer.SalaryFrom)
+    <p>Salary to:</p>
+    @Html.TextBoxFor(m => offer.SalaryTo)
+    @Html.ValidationMessageFor(m => offer.SalaryTo)
+    <p>Valid until:</p>
+    @Html.EditorFor(m => offer.ValidUntil)//, new { @value = DateTime.Now.ToShortDateString() })
+    @Html.ValidationMessageFor(m => offer.ValidUntil)
+    <br />
+    <br />
+    <input type="submit" value="Submit new job offer" />
+}
+

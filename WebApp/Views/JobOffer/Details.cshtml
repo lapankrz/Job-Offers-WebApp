@@ -15,7 +15,7 @@
     <input type="button" name="applyButton" value="Apply Now" onclick="location.href='@Url.Action("Form", "JobApplication", new { id = Model.Id })'" />
     <input type="button" name="editButton" value="Edit" />
     <br>
-    <input type="button" name="deleteButton" value="Delete" />
+    <input type="button" name="deleteButton" value="Delete" onclick="location.href='@Url.Action("DeleteOffer", "JobOffer", new { id = Model.Id })'"/>
 </div>
 <hr/>
 @if (Model.JobApplications.Count > 0)
