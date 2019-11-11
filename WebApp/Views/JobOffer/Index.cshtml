@@ -4,12 +4,76 @@
     ViewData["Title"] = "Job Offer list";
 }
 
-<h2>Job Offer list</h2>
-<ul>
-    @foreach (var offer in Model.OrderBy(o => o.JobTitle))
-    {
-        <li>@Html.ActionLink(offer.JobTitle, "Details", new { id = offer.Id })</li>
-    }
-</ul>
-<br />
-<input type="button" name="addJobOffer" value="Add Job Offer" onclick="location.href='@Url.Action("AddJobOffer", "JobOffer")'" />
+    <div class="table-title">
+        <div class="row">
+            <div class="col-sm-4 col-md-4 d-flex align-items-center py-2">
+                <h3 class="font-weight-bold mb-0">
+                    Job Offer list
+                </h3>
+                <div>
+                    <span class="badge badge-pill badge-primary align-top">
+                        @Model.Count
+                    </span>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 py-2">
+                @using (Html.BeginForm("Index", "JobOffer", FormMethod.Get))
+                {
+                    <div class="input-group search-input"
+                         style="border-radius: 20px">
+                        <input name="search"
+                               type="text"
+                               class="form-control"
+                               placeholder="Search by offer title..."
+                               aria-label="Search by offer title"
+                               aria-describedby="button-search">
+                        <div class="input-group-append">
+                            <button id="button-search"
+                                    class="btn btn-primary"
+                                    type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-12 col-sm-4 text-right py-2">
+                <button class="btn btn-rounded btn-outline-primary" data-toggle="modal" name="addJobOffer" onclick="location.href='@Url.Action("AddJobOffer", "JobOffer")'">
+                    <i class="fas fa-plus pr-3"></i>
+                    Add Job Offer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Job Title</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Created</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var offer in Model.OrderBy(o => o.JobTitle))
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(offer.JobTitle, "Details", new { id = offer.Id })
+                    </td>
+                    <td>@offer.Company.Name</td>
+                    <td>@offer.Location</td>
+                    <td>@offer.CreationDate.ToShortDateString()</td>
+                    <td>
+
+                        <i class="fas fa-edit"
+                           title="Edit"></i>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+

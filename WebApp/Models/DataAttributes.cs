@@ -92,14 +92,7 @@ namespace WebApp.Models
             // Compare values
             if ((int)value >= (int)propertyTestedValue)
             {
-                if (value == propertyTestedValue)
-                {
-                    return ValidationResult.Success;
-                }
-                else if ((int)value > (int)propertyTestedValue)
-                {
-                    return ValidationResult.Success;
-                }
+                return ValidationResult.Success;
             }
 
             return new ValidationResult(GetErrorMessage());

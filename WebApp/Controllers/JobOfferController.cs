@@ -20,7 +20,7 @@ namespace WebApp.Controllers
         [Route("index")]
         public IActionResult Index()
         {
-            return View(context.JobOffers.ToList());
+            return View(context.JobOffers.Include(o => o.Company).ToList());
         }
         [Route("AddJobOffer")]
         public IActionResult AddJobOffer()
