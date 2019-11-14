@@ -18,9 +18,12 @@ namespace WebApp.Controllers
             context = dataContext;
         }
         [Route("index")]
-        public IActionResult Index()
+        public IActionResult Index(string search)
         {
-            return View(context.JobOffers.Include(o => o.Company).ToList());
+            if (search == "" || search == null)
+                return View(context.JobOffers.Include(o => o.Company).ToList());
+            else
+                return View(context.JobOffers.Include(o => o.Company).Where(o => o.JobTitle.ToLower().Contains(search.ToLower())).ToList());
         }
         [Route("AddJobOffer")]
         public IActionResult AddJobOffer()
@@ -39,7 +42,7 @@ namespace WebApp.Controllers
                 offer.CreationDate = DateTime.Now;
                 context.JobOffers.Add(offer);
                 context.SaveChanges();
-                return View("/Views/JobOffer/Index.cshtml", context.JobOffers.ToList());
+                return View("/Views/JobOffer/Index.cshtml", context.JobOffers.Include(o => o.Company).Include(o => o.JobApplications).ToList());
             }
             return View("AddJobOffer");
         }

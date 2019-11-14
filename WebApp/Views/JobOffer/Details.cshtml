@@ -3,19 +3,39 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>@Model.JobTitle</h2>
+
+<div class="row">
+        <div class="col-sm-4 col-md-4 d-flex align-items-center py-2">
+            <button class="btn-sm btn-rounded btn-primary mr-3"  name="backToIndex" onclick="location.href='@Url.Action("Index", "JobOffer")'">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <h2 class="font-weight-bold d-flex align-self-center my-auto">
+                Details
+            </h2>
+        </div>
+</div>
+<h3>
+    @Model.JobTitle
+</h3>
 <div>
-    <p>@Model.JobDescription</p>
+    <p><b>Description: </b>@Model.JobDescription</p>
     <p><b>Company: </b>@Model.Company.Name</p>
     <p><b>Location: </b>@Model.Location</p>
     <p><b>Salary: </b>@Model.SalaryFrom - @Model.SalaryTo PLN</p>
     <p><b>Created: </b>@Model.CreationDate.ToString()</p>
 </div>
 <div>
-    <input type="button" name="applyButton" value="Apply Now" onclick="location.href='@Url.Action("Form", "JobApplication", new { id = Model.Id })'" />
-    <input type="button" name="editButton" value="Edit" />
+    <button class="btn btn-rounded btn-primary mr-3" name="applyButton" onclick="location.href='@Url.Action("Form", "JobApplication", new { id = Model.Id })'">Apply Now</button>
+    <button class="btn btn-rounded btn-primary mr-3" name="editButton">Edit</button>
     <br>
-    <input type="button" name="deleteButton" value="Delete" onclick="location.href='@Url.Action("DeleteOffer", "JobOffer", new { id = Model.Id })'"/>
+    <button class="btn btn-rounded btn-danger mr-3 mt-3"
+            name="deleteButton"
+            data-toggle="modal"
+            data-target="#confirm-delete"
+            @*onclick="location.href='@Url.Action("DeleteOffer", "JobOffer", new { id = Model.Id })'*@">
+        <i class="fas fa-trash-alt pr-2"></i>
+        Delete
+    </button>
 </div>
 <hr/>
 @if (Model.JobApplications.Count > 0)
@@ -39,4 +59,37 @@
 }
 <div>
     @Html.ActionLink("Return to job index", "Index", "JobOffer")
+</div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Employee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <p class="font-weight-bold mb-0">Are you sure you want to delete this?</p>
+                <p class="text-danger mb-0"><small>This action cannot be undone.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-rounded" data-dismiss="modal">
+                    <i class="fas fa-chevron-left pr-2"></i>
+                    Cancel
+                </button>
+                @using (Html.BeginForm("DeleteOffer", "JobOffer", new { Model.Id }, FormMethod.Post, null, new { style = "display:inline;" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-rounded btn-danger">
+                        <i class="fas fa-trash-alt pr-2"></i>
+                        Delete
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
 </div>
