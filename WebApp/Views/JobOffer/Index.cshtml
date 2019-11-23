@@ -67,9 +67,13 @@
                     <td>@offer.Location</td>
                     <td>@offer.CreationDate.ToShortDateString()</td>
                     <td>
-
-                        <i class="fas fa-edit"
-                           title="Edit"></i>
+                        <a
+                           href="@Url.Action("EditJobOffer", "JobOffer", new { id = offer.Id})"
+                           class="text-primary"
+                        >
+                            <i class="fas fa-edit"
+                               title="Edit"></i>
+                        </a>
                     </td>
                 </tr>
             }

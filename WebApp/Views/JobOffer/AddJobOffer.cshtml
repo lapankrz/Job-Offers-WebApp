@@ -1,37 +1,47 @@
-﻿
+﻿@model List<Company>
+
 @{
     ViewData["Title"] = "AddJobOffer";
 }
 
-
-<h2>Add Job Offer</h2>
+<div class="row">
+    <div class="col-sm-4 col-md-4 d-flex align-items-center py-2">
+        <button class="btn-sm btn-rounded btn-primary mr-3" name="backToIndex" onclick="location.href='@Url.Action("Index", "JobOffer")'">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <h2 class="font-weight-bold d-flex align-self-center my-auto">
+            Add Job Offer
+        </h2>
+    </div>
+</div>
 
 @{ var offer = new JobOffer(); offer.ValidUntil = DateTime.Now; }
 
 @using (Html.BeginForm("SaveJobOffer", "JobOffer"))
 {
     <p>Job Title</p>
-    @Html.ValidationSummary(true, "")
-    @Html.TextBoxFor(m => offer.JobTitle)
-    @Html.ValidationMessageFor(m => offer.JobTitle)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.EditorFor(m => offer.JobTitle, new { htmlAttributes = new { @class = "form-control" } })
+    <div class="invalid-feedback">
+        @Html.ValidationMessageFor(m => offer.JobTitle)
+    </div>
     <p>Description</p>
-    @Html.TextBoxFor(m => offer.JobDescription)
-    <p>Company ID</p>
-    @Html.TextBoxFor(m => offer.Id)
-    @Html.ValidationMessageFor(m => offer.Company)
+    @Html.EditorFor(m => offer.JobDescription, new { htmlAttributes = new { @class = "form-control" } })
+    <p>Company</p>
+    @Html.DropDownListFor(m => offer.Company.Id, new SelectList(Model, "Id", "Name"), "Choose a company", htmlAttributes: new { @class = "form-control"})
     <p>Location</p>
-    @Html.TextBoxFor(m => offer.Location)
+    @Html.EditorFor(m => offer.Location, new { htmlAttributes = new { @class = "form-control" } })
     @Html.ValidationMessageFor(m => offer.Location)
     <p>Salary from:</p>
-    @Html.TextBoxFor(m => offer.SalaryFrom)
+    @Html.EditorFor(m => offer.SalaryFrom, new { htmlAttributes = new { @class = "form-control" } })
     <p>Salary to:</p>
-    @Html.TextBoxFor(m => offer.SalaryTo)
+    @Html.EditorFor(m => offer.SalaryTo, new { htmlAttributes = new { @class = "form-control" } })
     @Html.ValidationMessageFor(m => offer.SalaryTo)
     <p>Valid until:</p>
-    @Html.EditorFor(m => offer.ValidUntil)//, new { @value = DateTime.Now.ToShortDateString() })
+    @Html.EditorFor(m => offer.ValidUntil, new { htmlAttributes = new { @class = "form-control" } })
     @Html.ValidationMessageFor(m => offer.ValidUntil)
     <br />
     <br />
-    <input type="submit" value="Submit new job offer" />
+    <input type="submit" value="Submit new job offer" class="btn btn-primary" />
 }
 

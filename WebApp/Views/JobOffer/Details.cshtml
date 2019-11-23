@@ -26,7 +26,7 @@
 </div>
 <div>
     <button class="btn btn-rounded btn-primary mr-3" name="applyButton" onclick="location.href='@Url.Action("Form", "JobApplication", new { id = Model.Id })'">Apply Now</button>
-    <button class="btn btn-rounded btn-primary mr-3" name="editButton">Edit</button>
+    <button class="btn btn-rounded btn-primary mr-3" name="editButton" onclick="location.href='@Url.Action("EditJobOffer", "JobOffer", new { id = Model.Id })'">Edit</button>
     <br>
     <button class="btn btn-rounded btn-danger mr-3 mt-3"
             name="deleteButton"

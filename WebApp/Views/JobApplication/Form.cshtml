@@ -4,23 +4,50 @@
     ViewData["Title"] = "Form";
 }
 
-<h2>Apply for: @Html.ActionLink(Model.JobTitle, "Details", "JobOffer", new { id = Model.Id })</h2>
+<div class="row">
+    <div class="col-sm-12 col-md-12 d-flex align-items-center py-2">
+        <button class="btn-sm btn-rounded btn-primary mr-3" name="backToIndex" onclick="location.href='@Url.Action("Details", "JobOffer", new { id = Model.Id })'">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <h2 class="font-weight-bold d-flex align-self-center my-auto"> Apply for:  @Html.ActionLink(Model.JobTitle, "Details", "JobOffer", new { id = Model.Id })</h2>
+    </div>
+</div>
 
 @{var application = new JobApplication(); application.OfferId = Model.Id; }
 
 @using (Html.BeginForm("SaveForm", "JobApplication"))
 {
     @Html.HiddenFor(m => application.OfferId, new { @Value = Model.Id })
-    <p>First Name</p>
-    @Html.TextBoxFor(m => application.FirstName)
-    <p>Last Name</p>
-    @Html.TextBoxFor(m => application.LastName)
-    <p>Contact Email</p>
-    @Html.TextBoxFor(m => application.EmailAddress)
-    <p>Contact Phone</p>
-    @Html.TextBoxFor(m => application.PhoneNumber)
-    <br />
-    <br />
-    <input type="submit" value="Submit application" />
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.Label("First Name")
+        @Html.EditorFor(model => application.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => application.FirstName)
+    </div>
+    <div class="form-group">
+        @Html.Label("Last Name")
+        @Html.EditorFor(model => application.LastName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => application.LastName)
+    </div>
+    <div class="form-group">
+        @Html.Label("Email Address")
+        @Html.EditorFor(model => application.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => application.EmailAddress)
+    </div>
+    <div class="form-group">
+        @Html.Label("Contact Phone")
+        @Html.EditorFor(model => application.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => application.PhoneNumber)
+    </div>
+    <div class="form-group">
+        @Html.Label("Contact Agreement")
+        <div>
+            @Html.EditorFor(model => application.ContactAgreement, new { htmlAttributes = new { @class = "form-check-input" } })
+            <label class="form-check-label">I agree to the terms of contact</label>
+        </div>
+        @Html.ValidationMessageFor(model => application.ContactAgreement)
+    </div>
+    <input type="submit" value="Submit application" class="btn btn-primary"/>
 }
 
