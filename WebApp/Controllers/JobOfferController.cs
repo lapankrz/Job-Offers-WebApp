@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApp.EntityFramework;
@@ -10,6 +11,7 @@ using WebApp.Models;
 namespace WebApp.Controllers
 {
     [Route("joboffer")]
+    [ApiController]
     public class JobOfferController : Controller
     {
         public DataContext context;
@@ -18,6 +20,7 @@ namespace WebApp.Controllers
             context = dataContext;
         }
         [Route("index")]
+        [HttpGet]
         public IActionResult Index(string search)
         {
             if (search == "" || search == null)

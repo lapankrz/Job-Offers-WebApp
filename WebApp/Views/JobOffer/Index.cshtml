@@ -4,80 +4,98 @@
     ViewData["Title"] = "Job Offer list";
 }
 
-    <div class="table-title">
-        <div class="row">
-            <div class="col-sm-4 col-md-4 d-flex align-items-center py-2">
-                <h3 class="font-weight-bold mb-0">
-                    Job Offer list
-                </h3>
-                <div>
-                    <span class="badge badge-pill badge-primary align-top">
-                        @Model.Count
-                    </span>
-                </div>
-            </div>
-            <div class="col-12 col-md-4 py-2">
-                @using (Html.BeginForm("Index", "JobOffer", FormMethod.Get))
-                {
-                    <div class="input-group search-input"
-                         style="border-radius: 20px">
-                        <input name="search"
-                               type="text"
-                               class="form-control"
-                               placeholder="Search by offer title..."
-                               aria-label="Search by offer title"
-                               aria-describedby="button-search">
-                        <div class="input-group-append">
-                            <button id="button-search"
-                                    class="btn btn-primary"
-                                    type="submit">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                }
-            </div>
-            <div class="col-12 col-sm-4 text-right py-2">
-                <button class="btn btn-rounded btn-outline-primary" data-toggle="modal" name="addJobOffer" onclick="location.href='@Url.Action("AddJobOffer", "JobOffer")'">
-                    <i class="fas fa-plus pr-3"></i>
-                    Add Job Offer
-                </button>
+
+<div class="table-title">
+    <div class="row">
+        <div class="col-sm-4 col-md-4 d-flex align-items-center py-2">
+            <h3 class="font-weight-bold mb-0">
+                Job Offer list
+            </h3>
+            <div>
+                <span class="badge badge-pill badge-primary align-top">
+                    @Model.Count
+                </span>
             </div>
         </div>
+        <div class="col-12 col-md-4 py-2">
+            <div class="input-group search-input"
+                 style="border-radius: 20px">
+                <input name="searchBox"
+                       id="searchBox"
+                       type="text"
+                       class="form-control"
+                       placeholder="Search by offer title..."
+                       aria-label="Search by offer title"
+                       aria-describedby="button-search">
+                <div class="input-group-append">
+                    <button id="button-search"
+                            class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-4 text-right py-2">
+            <button class="btn btn-rounded btn-outline-primary" data-toggle="modal" name="addJobOffer" onclick="location.href='@Url.Action("AddJobOffer", "JobOffer")'">
+                <i class="fas fa-plus pr-3"></i>
+                Add Job Offer
+            </button>
+        </div>
     </div>
+</div>
 
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Job Title</th>
-                <th>Company</th>
-                <th>Location</th>
-                <th>Created</th>
-                <th></th>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Created</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var offer in Model.OrderBy(o => o.JobTitle))
+        {
+            <tr class="singleOffer">
+                <td>
+                    @Html.ActionLink(offer.JobTitle, "Details", new { id = offer.Id })
+                </td>
+                <td>@offer.Company.Name</td>
+                <td>@offer.Location</td>
+                <td>@offer.CreationDate.ToShortDateString()</td>
+                <td>
+                    <a href="@Url.Action("EditJobOffer", "JobOffer", new { id = offer.Id})"
+                       class="text-primary">
+                        <i class="fas fa-edit"
+                           title="Edit"></i>
+                    </a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var offer in Model.OrderBy(o => o.JobTitle))
-            {
-                <tr>
-                    <td>
-                        @Html.ActionLink(offer.JobTitle, "Details", new { id = offer.Id })
-                    </td>
-                    <td>@offer.Company.Name</td>
-                    <td>@offer.Location</td>
-                    <td>@offer.CreationDate.ToShortDateString()</td>
-                    <td>
-                        <a
-                           href="@Url.Action("EditJobOffer", "JobOffer", new { id = offer.Id})"
-                           class="text-primary"
-                        >
-                            <i class="fas fa-edit"
-                               title="Edit"></i>
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        function Contains(text_one, text_two) {
+            if (text_one.indexOf(text_two) != -1)
+                return true;
+        }
+        $("#button-search").click(function () {
+            var searchText = $("#searchBox").val().toLowerCase();
+            $(".singleOffer").each(function () {
+                if (!Contains($(this).text().toLowerCase(), searchText)) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            });
+        });
+    });
+</script>
 
 
