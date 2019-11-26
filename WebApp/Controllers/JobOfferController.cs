@@ -11,7 +11,6 @@ using WebApp.Models;
 namespace WebApp.Controllers
 {
     [Route("joboffer")]
-    [ApiController]
     public class JobOfferController : Controller
     {
         public DataContext context;
@@ -51,12 +50,21 @@ namespace WebApp.Controllers
             }
             return View("AddJobOffer");
         }
+
+        //[Route("Details")]
+        //public IActionResult Details(int id)
+        //{
+        //    var offer = context.JobOffers.Include(o => o.Company).Include(o => o.JobApplications).FirstOrDefault(o => o.Id == id);
+        //    return View(offer);
+        //}
         [Route("Details")]
         public IActionResult Details(int id)
         {
-            var offer = context.JobOffers.Include(o => o.Company).Include(o => o.JobApplications).FirstOrDefault(o => o.Id == id);
+            var offer = context.JobOffers.Include(o => o.Company).FirstOrDefault(o => o.Id == id);
             return View(offer);
         }
+        
+
         [Route("Delete")]
         public IActionResult DeleteOffer(int id)
         {
