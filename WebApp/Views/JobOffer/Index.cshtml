@@ -44,7 +44,12 @@
     </div>
 </div>
 
-<table class="table table-hover">
+
+<div id="offer-div">
+
+</div>
+
+@*<table class="table table-hover" id="offer-table">
     <thead>
         <tr>
             <th>Job Title</th>
@@ -74,17 +79,19 @@
             </tr>
         }
     </tbody>
-</table>
+</table>*@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-<script>
+@*<script>
     $(document).ready(function () {
         function Contains(text_one, text_two) {
             if (text_one.indexOf(text_two) != -1)
                 return true;
         }
-        $("#button-search").click(function () {
+        $("#button-search").click(function (e) {
+            e.preventDefault();
+            fetchAll();
             var searchText = $("#searchBox").val().toLowerCase();
             $(".singleOffer").each(function () {
                 if (!Contains($(this).text().toLowerCase(), searchText)) {
@@ -96,6 +103,158 @@
             });
         });
     });
+    function fetchAll() {
+        $.ajax({
+            url: '/api/Paging',
+            type: 'POST',
+            //data: { pageNo: pageNo },
+            dataType: 'json',
+            success: function (data) {
+                var $table = $('<table/>').addClass('table table-hover');
+                var $header = $('<thead/>').html('<tr><th>Job Title</th><th>Company</th><th>Location</th><th>Created</th><th></th></tr>');
+                $table.append($header);
+                $.each(data, function (i, offer) {
+                    var row = '<tr class="singleOffer">'
+                    row += '<td>' + '<a href="/joboffer/Details/?id=' + offer.id + '">' + offer.jobTitle + '</a>' + '</td>';
+                    row += '<td>' + offer.company + '</td>';
+                    row += '<td>' + offer.location + '</td>';
+                    row += '<td>' + offer.creationDate + '</td>';
+                    row += '<td>' + '<a href="/joboffer/Details/?id=' + offer.id + '" class="text-primary"><i class="fas fa-edit"title="Edit"></i></a></td>';
+                    row += '</tr>'
+                    $table.append(row);
+                });
+
+                var $footer = $('<tr/>');
+                var $footerTD = $('<td/>').attr('colspan', 4);
+                $footer.append($footerTD);
+                $table.append($footer);
+
+                $('#offer-div').html($table);
+            },
+            error: function () {
+                alert('Error! Please try again.');
+            }
+        });
+    }
+</script>*@
+
+<script>
+    var currentPage = 1;
+    $(document).ready(function () {
+        function Contains(text_one, text_two) {
+            if (text_one.indexOf(text_two) != -1)
+                return true;
+        }
+        $("#button-search").click(function (e) {
+            e.preventDefault();
+            var searchText = $("#searchBox").val().toLowerCase();
+            if (searchText.length > 0) {
+                fetchSearch(searchText);
+            }
+            else {
+                fetchData(1);
+            }
+        });
+        fetchData(1);
+    });
+    function fetchData(pageNo) {
+        currentPage = pageNo;
+        $.ajax({
+            url: '/api/Paging/' + pageNo,
+            type: 'POST',
+            data: { pageNo: pageNo },
+            dataType: 'json',
+            success: function (data) {
+                var $table = $('<table/>').addClass('table table-hover');
+                var $header = $('<thead/>').html('<tr><th>Job Title</th><th>Company</th><th>Location</th><th>Created</th><th></th></tr>');
+                $table.append($header);
+                $.each(data.offers, function (i, offer) {
+                    var row = '<tr class="singleOffer">'
+                    row += '<td>' + '<a href="/joboffer/Details/?id=' + offer.id + '">' + offer.jobTitle + '</a>' + '</td>';
+                    row += '<td>' + offer.company.name + '</td>';
+                    row += '<td>' + offer.location + '</td>';
+                    row += '<td>' + offer.creationDate.replace("T", " ") + '</td>';
+                    row += '<td>' + '<a href="/joboffer/Edit/?id=' + offer.id + '" class="text-primary"><i class="fas fa-edit"title="Edit"></i></a></td>';
+                    row += '</tr>'
+                    $table.append(row);
+                });
+
+                var totalPage = parseInt(data.totalPage);
+                var $footer = $('<tr/>');
+                var $footerTD = $('<td/>').attr('colspan', 4).addClass('footerContent');
+
+                if (totalPage > 0) {
+                    for (var i = 1; i <= totalPage; i++) {
+                        var $page = $('<span/>');
+                        $page.html((i == currentPage) ? "<button class='btn btn-primary' disabled>" + i + "</button>" : "<button class='btn btn-light' onclick='fetchData(" + i + ");'>" + i + "</button>");
+                        $footerTD.append($page);
+                    }
+                    $footer.append($footerTD);
+                }
+                $table.append($footer);
+
+                $('#offer-div').html($table);
+            },
+            error: function () {
+                alert('Error! Please try again.');
+            }
+        });
+    }
+    function fetchSearch(searchText) {
+        $.ajax({
+            url: '/api/Paging/',
+            type: 'GET',
+            data: { searchText: searchText },
+            dataType: 'json',
+            success: function (data) {
+                var $table = $('<table/>').addClass('table table-hover');
+                var $header = $('<thead/>').html('<tr><th>Job Title</th><th>Company</th><th>Location</th><th>Created</th><th></th></tr>');
+                $table.append($header);
+                $.each(data, function (i, offer) {
+                    var row = '<tr class="singleOffer">'
+                    row += '<td>' + '<a href="/joboffer/Details/?id=' + offer.id + '">' + offer.jobTitle + '</a>' + '</td>';
+                    row += '<td>' + offer.company.name + '</td>';
+                    row += '<td>' + offer.location + '</td>';
+                    row += '<td>' + offer.creationDate + '</td>';
+                    row += '<td>' + '<a href="/joboffer/Edit/?id=' + offer.id + '" class="text-primary"><i class="fas fa-edit"title="Edit"></i></a></td>';
+                    row += '</tr>'
+                    $table.append(row);
+                });
+
+                $('#offer-div').html($table);
+            },
+            error: function () {
+                alert('Error! Please try again.');
+            }
+        });
+    }
 </script>
 
+<style>
+    table {
+        table-layout: fixed;
+        width: 95%;
+    }
 
+    th, td {
+        width: 23%;
+        overflow: hidden;
+    }
+
+    td.footerContent span a {
+        display: inline-block;
+        padding: 3px 10px;
+        background-color: chartreuse;
+        margin-right: 4px;
+        border: 1px solid #998787;
+        cursor: pointer;
+    }
+
+    td.footerContent span a {
+        text-decoration: none;
+    }
+
+    td.footerContent {
+        text-align: right;
+    }
+</style>
