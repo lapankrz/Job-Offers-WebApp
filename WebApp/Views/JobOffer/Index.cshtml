@@ -173,7 +173,7 @@
                     row += '<td>' + '<a href="/joboffer/Details/?id=' + offer.id + '">' + offer.jobTitle + '</a>' + '</td>';
                     row += '<td>' + offer.company.name + '</td>';
                     row += '<td>' + offer.location + '</td>';
-                    row += '<td>' + offer.creationDate.replace("T", " ") + '</td>';
+                    row += '<td>' + offer.creationDate.split("T")[0] + '</td>';
                     row += '<td>' + '<a href="/joboffer/Edit/?id=' + offer.id + '" class="text-primary"><i class="fas fa-edit"title="Edit"></i></a></td>';
                     row += '</tr>'
                     $table.append(row);

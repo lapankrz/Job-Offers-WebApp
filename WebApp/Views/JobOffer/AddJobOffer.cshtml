@@ -4,6 +4,13 @@
     ViewData["Title"] = "AddJobOffer";
 }
 
+<head>
+    <script type="text/javascript" src="~/lib/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+</head>
+
 <div class="row">
     <div class="col-sm-4 col-md-4 d-flex align-items-center py-2">
         <button class="btn-sm btn-rounded btn-primary mr-3" name="backToIndex" onclick="location.href='@Url.Action("Index", "JobOffer")'">
@@ -17,31 +24,104 @@
 
 @{ var offer = new JobOffer(); offer.ValidUntil = DateTime.Now; }
 
-@using (Html.BeginForm("SaveJobOffer", "JobOffer"))
+@using (Html.BeginForm("SaveJobOffer", "JobOffer", new { htmlAttributes = new { id = "form", name = "form" } }))
 {
     <p>Job Title</p>
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.EditorFor(m => offer.JobTitle, new { htmlAttributes = new { @class = "form-control" } })
-    <div class="invalid-feedback">
-        @Html.ValidationMessageFor(m => offer.JobTitle)
-    </div>
+    @Html.EditorFor(m => offer.JobTitle, new { htmlAttributes = new { @class = "form-control", required = "required", name = "jobTitle" } })
+    @Html.ValidationMessageFor(m => offer.JobTitle, "", new { @class = "errorText" });
+
     <p>Description</p>
     @Html.EditorFor(m => offer.JobDescription, new { htmlAttributes = new { @class = "form-control" } })
+
     <p>Company</p>
-    @Html.DropDownListFor(m => offer.Company.Id, new SelectList(Model, "Id", "Name"), "Choose a company", htmlAttributes: new { @class = "form-control"})
+    @Html.DropDownListFor(m => offer.Company.Id, new SelectList(Model, "Id", "Name"), "Choose a company", htmlAttributes: new { @class = "form-control", required = "required"})
+    @Html.ValidationMessageFor(m => offer.Company.Id, "", new { @class = "errorText" })
+
     <p>Location</p>
-    @Html.EditorFor(m => offer.Location, new { htmlAttributes = new { @class = "form-control" } })
-    @Html.ValidationMessageFor(m => offer.Location)
+    @Html.EditorFor(m => offer.Location, new { htmlAttributes = new { @class = "form-control", required = "required", name = "location" } })
+    @Html.ValidationMessageFor(m => offer.Location, "", new { @class = "errorText" });
+
     <p>Salary from:</p>
-    @Html.EditorFor(m => offer.SalaryFrom, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.EditorFor(m => offer.SalaryFrom, new { htmlAttributes = new { @class = "form-control", id = "salaryFrom", name = "salaryFrom" } })
+    @Html.ValidationMessageFor(m => offer.SalaryFrom, "", new { @class = "errorText" })
+
     <p>Salary to:</p>
-    @Html.EditorFor(m => offer.SalaryTo, new { htmlAttributes = new { @class = "form-control" } })
-    @Html.ValidationMessageFor(m => offer.SalaryTo)
+    @Html.EditorFor(m => offer.SalaryTo, new { htmlAttributes = new { @class = "form-control", id = "salaryTo", name = "salaryTo" } })
+    @Html.ValidationMessageFor(m => offer.SalaryTo, "", new { @class = "errorText" })
+
     <p>Valid until:</p>
-    @Html.EditorFor(m => offer.ValidUntil, new { htmlAttributes = new { @class = "form-control" } })
-    @Html.ValidationMessageFor(m => offer.ValidUntil)
+    @Html.EditorFor(m => offer.ValidUntil, new { htmlAttributes = new { @class = "form-control", id = "validUntil" } })
+    @Html.ValidationMessageFor(m => offer.ValidUntil, "", new { @class = "errorText" })
     <br />
     <br />
     <input type="submit" value="Submit new job offer" class="btn btn-primary" />
 }
 
+<script>
+    $(document).ready(function () {
+        jQuery.validator.addMethod('greaterThan', function (value, element, param) {
+            if (this.optional(element)) return true;
+            var i = parseInt(value);
+            var j = parseInt($(param).val());
+            return i > j;
+        });
+        jQuery.validator.addMethod('futureDate', function (value, element) {
+            var now = new Date();
+            var myDate = new Date(value);
+            return this.optional(element) || myDate > now;
+        });
+
+        $('#form').validate({
+            debug: true,
+            rules: {
+                salaryTo: {
+                    greaterThan: $('#salaryFrom'),
+                    min: 1
+                },
+                salaryFrom: {
+                    min: 1
+                },
+                validUntil: {
+                    futureDate: true
+                }
+            },
+            messages: {
+                salaryTo: { greaterThan: 'Salary to must be greater than salary from' },
+                salaryFrom: { min: 'Salary must be positive' },
+                validUntil: { futureDate: 'Valid until date must be in the future' }
+            },
+        });
+
+        $('#salaryTo').rules("add", {
+            "greaterThan": "#salaryFrom",
+            min: 1,
+            messages: {
+                greaterThan: "SalaryTo must be greater than SalaryFrom",
+                min: "SalaryTo must be positive"
+            }
+        });
+        $('#salaryFrom').rules("add", {
+            min: 1,
+            messages: {
+                min: "SalaryFrom must be positive"
+            }
+        });
+        $('#validUntil').rules("add", {
+            futureDate: true,
+            messages: {
+                futureDate: "Valid until date must be in the future"
+            }
+        });
+
+
+
+    });
+</script>
+
+<style>
+    .errorText {
+        font-size: 10px;
+        color: red;
+    }
+</style>

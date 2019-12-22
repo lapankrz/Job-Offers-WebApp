@@ -4,6 +4,13 @@
     var companies = ViewBag.companies;
 }
 
+<head>
+    <script type="text/javascript" src="~/lib/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+</head>
+
 <div class="row">
     <div class="col-sm-4 col-md-4 d-flex align-items-center py-2">
         <button class="btn-sm btn-rounded btn-primary mr-3" name="backToIndex" onclick="location.href='@Url.Action("Index", "JobOffer")'">
@@ -14,7 +21,7 @@
         </h2>
     </div>
 </div>
-@using (Html.BeginForm("EditJobOffer", "JobOffer"))
+@using (Html.BeginForm("EditJobOffer", "JobOffer", new { htmlAttributes = new { id = "form", name = "form" } }))
 {
     @Html.HiddenFor(model => Model.CreationDate)
     @Html.HiddenFor(model => Model.JobApplications)
@@ -23,8 +30,8 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
         @Html.Label("Job Title")
-        @Html.EditorFor(model => model.JobTitle, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.JobTitle)
+        @Html.EditorFor(model => model.JobTitle, new { htmlAttributes = new { @class = "form-control", required = "required", name = "jobTitle" } })
+        @Html.ValidationMessageFor(model => model.JobTitle, "", new { @class = "errorText" })
     </div>
     <div class="form-group">
         @Html.Label("Description")
@@ -32,27 +39,96 @@
     </div>
     <div class="form-group">
         @Html.Label("Company ID")
-        @Html.DropDownListFor(m => Model.Company.Id, new SelectList(companies, "Id", "Name"), "Choose a company", htmlAttributes: new { @class = "form-control"})
+        @Html.DropDownListFor(m => Model.Company.Id, new SelectList(companies, "Id", "Name"), "Choose a company", htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => Model.Company.Id, "", new { @class = "errorText" })
     </div>
     <div class="form-group">
         @Html.Label("Location")
-        @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.Location)
+        @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+        @Html.ValidationMessageFor(model => model.Location, "", new { @class = "errorText" })
     </div>
     <div class="form-group">
         @Html.Label("Salary from: ")
-        @Html.EditorFor(model => model.SalaryFrom, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.SalaryFrom)
+        @Html.EditorFor(model => model.SalaryFrom, new { htmlAttributes = new { @class = "form-control", id = "salaryFrom", name = "salaryFrom" } })
+        @Html.ValidationMessageFor(model => model.SalaryFrom, "", new { @class = "errorText" })
     </div>
     <div class="form-group">
         @Html.Label("Salary to:")
-        @Html.EditorFor(model => model.SalaryTo, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.SalaryTo)
+        @Html.EditorFor(model => model.SalaryTo, new { htmlAttributes = new { @class = "form-control", id = "salaryTo", name = "salaryTo" } })
+        @Html.ValidationMessageFor(model => model.SalaryTo, "", new { @class = "errorText" })
     </div>
     <div class="form-group">
         @Html.Label("Valid until: ")
-        @Html.EditorFor(model => model.ValidUntil, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ValidUntil)
+        @Html.EditorFor(model => model.ValidUntil, new { htmlAttributes = new { @class = "form-control", id = "validUntil" } })
+        @Html.ValidationMessageFor(model => model.ValidUntil, "", new { @class = "errorText" })
     </div>
     <input type="submit" value="Save job offer" class="btn btn-primary" />
 }
+
+<script>
+    $(document).ready(function () {
+        jQuery.validator.addMethod('greaterThan', function (value, element, param) {
+            if (this.optional(element)) return true;
+            var i = parseInt(value);
+            var j = parseInt($(param).val());
+            return i > j;
+        });
+        jQuery.validator.addMethod('futureDate', function (value, element) {
+            var now = new Date();
+            var myDate = new Date(value);
+            return this.optional(element) || myDate > now;
+        });
+
+        $('#form').validate({
+            debug: true,
+            rules: {
+                salaryTo: {
+                    greaterThan: $('#salaryFrom'),
+                    min: 1
+                },
+                salaryFrom: {
+                    min: 1
+                },
+                validUntil: {
+                    futureDate: true
+                }
+            },
+            messages: {
+                salaryTo: { greaterThan: 'Salary to must be greater than salary from' },
+                salaryFrom: { min: 'Salary must be positive' },
+                validUntil: { futureDate: 'Valid until date must be in the future' }
+            },
+        });
+
+        $('#salaryTo').rules("add", {
+            "greaterThan": "#salaryFrom",
+            min: 1,
+            messages: {
+                greaterThan: "SalaryTo must be greater than SalaryFrom",
+                min: "SalaryTo must be positive"
+            }
+        });
+        $('#salaryFrom').rules("add", {
+            min: 1,
+            messages: {
+                min: "SalaryFrom must be positive"
+            }
+        });
+        $('#validUntil').rules("add", {
+            futureDate: true,
+            messages: {
+                futureDate: "Valid until date must be in the future"
+            }
+        });
+
+
+
+    });
+</script>
+
+<style>
+    .errorText {
+        font-size: 10px;
+        color: red;
+    }
+</style>

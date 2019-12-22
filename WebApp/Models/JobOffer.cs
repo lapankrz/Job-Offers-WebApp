@@ -12,6 +12,7 @@ namespace WebApp.Models
         [Required]
         public string JobTitle { get; set; }
         public string JobDescription { get; set; }
+        [Required]
         public Company Company { get; set; }
         [Required]
         public string Location { get; set; }

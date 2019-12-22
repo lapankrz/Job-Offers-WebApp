@@ -4,6 +4,13 @@
     ViewData["Title"] = "Form";
 }
 
+<head>
+    <script type="text/javascript" src="~/lib/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+</head>
+
 <div class="row">
     <div class="col-sm-12 col-md-12 d-flex align-items-center py-2">
         <button class="btn-sm btn-rounded btn-primary mr-3" name="backToIndex" onclick="location.href='@Url.Action("Details", "JobOffer", new { id = Model.Id })'">
@@ -15,39 +22,73 @@
 
 @{var application = new JobApplication(); application.OfferId = Model.Id; }
 
-@using (Html.BeginForm("SaveForm", "JobApplication"))
+@using (Html.BeginForm("SaveForm", "JobApplication", new { htmlAttributes = new { id = "form", name = "form" } }))
 {
     @Html.HiddenFor(m => application.OfferId, new { @Value = Model.Id })
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
         @Html.Label("First Name")
-        @Html.EditorFor(model => application.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => application.FirstName)
+        @Html.EditorFor(model => application.FirstName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+        @Html.ValidationMessageFor(model => application.FirstName, "", new { @class = "errorText" })
     </div>
     <div class="form-group">
         @Html.Label("Last Name")
-        @Html.EditorFor(model => application.LastName, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => application.LastName)
+        @Html.EditorFor(model => application.LastName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+        @Html.ValidationMessageFor(model => application.LastName, "", new { @class = "errorText" })
     </div>
     <div class="form-group">
         @Html.Label("Email Address")
-        @Html.EditorFor(model => application.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => application.EmailAddress)
+        @Html.EditorFor(model => application.EmailAddress, new { htmlAttributes = new { @class = "form-control", required = "required", email = "true" } })
+        @Html.ValidationMessageFor(model => application.EmailAddress, "", new { @class = "errorText" })
     </div>
     <div class="form-group">
         @Html.Label("Contact Phone")
-        @Html.EditorFor(model => application.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => application.PhoneNumber)
+        @Html.EditorFor(model => application.PhoneNumber, new { htmlAttributes = new { @class = "form-control", required = "required", name = "phone" } })
+        @Html.ValidationMessageFor(model => application.PhoneNumber, "", new { @class = "errorText" })
     </div>
     <div class="form-group">
         @Html.Label("Contact Agreement")
         <div>
-            @Html.EditorFor(model => application.ContactAgreement, new { htmlAttributes = new { @class = "form-check-input" } })
+            @Html.EditorFor(model => application.ContactAgreement, new { htmlAttributes = new { @class = "form-check-input", required = "required" } })
             <label class="form-check-label">I agree to the terms of contact</label>
         </div>
-        @Html.ValidationMessageFor(model => application.ContactAgreement)
+        @Html.ValidationMessageFor(model => application.ContactAgreement, "", new { @class = "errorText" })
     </div>
     <input type="submit" value="Submit application" class="btn btn-primary"/>
 }
 
+<script>
+    $(document).ready(function () {
+        jQuery.validator.addMethod("isPhone", function(phone_number, element) {
+            phone_number = phone_number.replace(/\s+/g, ""); 
+	        return this.optional(element) || phone_number.length > 9 &&
+		        phone_number.match(/[0-9]+/);
+        }, "Please specify a valid phone number");
+        $('#form').validate({
+            debug: true,
+            rules: {
+                phone: {
+                    isPhone: true
+                }
+            }
+        });
+        $('#phone').rules("add", {
+            isPhone: true,
+            messages: {
+                isPhone: "Please specify a valid phone number"
+            }
+        });
+
+
+
+    });
+</script>
+
+
+<style>
+    .errorText {
+        font-size: 10px;
+        color: red;
+    }
+</style>

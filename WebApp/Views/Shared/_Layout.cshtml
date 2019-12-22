@@ -37,7 +37,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav flex-grow-1">
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
@@ -51,6 +51,7 @@
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
                 </li>
             </ul>
+            <partial name="_LoginPartial" />
         </div>
     </nav>
 
@@ -65,11 +66,11 @@
     </div>
 
     <environment include="Development">
-        <script src="~/lib/js/jquery-3.4.1.js"></script>
+        @*<script src="~/lib/js/jquery-3.4.1.js"></script>*@
         <script src="~/lib/js/bootstrap.bundle.js"></script>
     </environment>
     <environment exclude="Development">
-        <script src="~/lib/js/jquery-3.4.1.min.js"></script>
+        @*<script src="~/lib/js/jquery-3.4.1.min.js"></script>*@
         <script src="~/lib/js/bootstrap.bundle.min.js"></script>
     </environment>
 

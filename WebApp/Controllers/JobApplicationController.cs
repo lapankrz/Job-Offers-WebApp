@@ -28,10 +28,14 @@ namespace WebApp.Controllers
         public IActionResult SaveForm(JobApplication application)
         {
             var offer = context.JobOffers.Include(o => o.Company).Include(o => o.JobApplications).FirstOrDefault(o => o.Id == application.OfferId);
-            offer.JobApplications.Add(application);
-            context.JobApplications.Add(application);
-            context.SaveChanges();
-            return View("/Views/JobOffer/Details.cshtml", offer);
+            if (ModelState.IsValid)
+            {
+                offer.JobApplications.Add(application);
+                context.JobApplications.Add(application);
+                context.SaveChanges();
+                return View("/Views/JobOffer/Details.cshtml", offer);
+            }
+            return View("/Views/JobApplication/Form.cshtml", offer);
         }
     }
 }

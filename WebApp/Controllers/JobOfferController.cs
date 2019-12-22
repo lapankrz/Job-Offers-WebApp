@@ -31,7 +31,6 @@ namespace WebApp.Controllers
         [Route("Add")]
         public IActionResult AddJobOffer()
         {
-            //pobrać firmy do drop down menu
             var companies = context.Companies.ToList();
             return View(companies);
         }
@@ -48,15 +47,9 @@ namespace WebApp.Controllers
                 context.SaveChanges();
                 return View("/Views/JobOffer/Index.cshtml", context.JobOffers.Include(o => o.Company).Include(o => o.JobApplications).ToList());
             }
-            return View("AddJobOffer");
+            return View("AddJobOffer", context.Companies.ToList());
         }
 
-        //[Route("Details")]
-        //public IActionResult Details(int id)
-        //{
-        //    var offer = context.JobOffers.Include(o => o.Company).Include(o => o.JobApplications).FirstOrDefault(o => o.Id == id);
-        //    return View(offer);
-        //}
         [Route("Details")]
         public IActionResult Details(int id)
         {
