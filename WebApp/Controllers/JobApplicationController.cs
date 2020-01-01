@@ -54,7 +54,6 @@ namespace WebApp.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
                     using (StreamReader streamReader = new StreamReader(CV.OpenReadStream()))
                     {
                         var blob = container.GetBlockBlobReference(application.FirstName + " " + application.LastName + " " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"));
