@@ -22,7 +22,6 @@ namespace WebApp.Models
         public string EmailAddress { get; set; }
         [Required]
         public bool ContactAgreement { get; set; }
-        [Required]
         public string CvUrl { get; set; }
     }
 }

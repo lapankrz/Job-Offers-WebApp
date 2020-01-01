@@ -22,11 +22,12 @@
 
 @{var application = new JobApplication(); application.OfferId = Model.Id; }
 
-@using (Html.BeginForm("SaveForm", "JobApplication", new { htmlAttributes = new { id = "form", name = "form" } }))
-{
+
+<form method="post" enctype="multipart/form-data" asp-controller="JobApplication" asp-action="SaveForm" id = "form" name = "form">
     @Html.HiddenFor(m => application.OfferId, new { @Value = Model.Id })
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(m => application.CvUrl, new { @Value = "" })
+    @*@Html.AntiForgeryToken()*@
+    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
     <div class="form-group">
         @Html.Label("First Name")
         @Html.EditorFor(model => application.FirstName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
@@ -55,15 +56,19 @@
         </div>
         @Html.ValidationMessageFor(model => application.ContactAgreement, "", new { @class = "errorText" })
     </div>
-    <input type="submit" value="Submit application" class="btn btn-primary"/>
-}
+    <div class="form-group">
+        <input type="file" name="CV"/>
+        @Html.ValidationMessage("cvMessage")
+    </div>
+    <input type="submit" value="Submit application" class="btn btn-primary" />
+</form>
 
 <script>
     $(document).ready(function () {
-        jQuery.validator.addMethod("isPhone", function(phone_number, element) {
-            phone_number = phone_number.replace(/\s+/g, ""); 
-	        return this.optional(element) || phone_number.length > 9 &&
-		        phone_number.match(/[0-9]+/);
+        jQuery.validator.addMethod("isPhone", function (phone_number, element) {
+            phone_number = phone_number.replace(/\s+/g, "");
+            return this.optional(element) || phone_number.length > 9 &&
+                phone_number.match(/[0-9]+/);
         }, "Please specify a valid phone number");
         $('#form').validate({
             debug: true,
