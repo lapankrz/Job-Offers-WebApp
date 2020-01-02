@@ -13,6 +13,8 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using System.IO;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace WebApp.Controllers
 {
@@ -22,9 +24,11 @@ namespace WebApp.Controllers
     {
         private readonly DataContext context;
         private readonly CloudBlobContainer container;
-        public JobApplicationController(DataContext dataContext)
+        private readonly IConfiguration _configuration;
+        public JobApplicationController(DataContext dataContext, IConfiguration configuration)
         {
             context = dataContext;
+            _configuration = configuration;
             CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials("lapanstorage",
                                                                         "31P/CvcdO4hXWM6S1EgkArfEGSetAEnr/I12ZZTE0ov34z2bqAADsYHSIOrIdgvAyQil5va+fGYCW3cfjim8iQ=="), true);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
@@ -54,13 +58,15 @@ namespace WebApp.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    string name = application.FirstName + " " + application.LastName + " " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
                     using (StreamReader streamReader = new StreamReader(CV.OpenReadStream()))
                     {
-                        var blob = container.GetBlockBlobReference(application.FirstName + " " + application.LastName + " " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"));
+                        var blob = container.GetBlockBlobReference(name);
+                        blob.Properties.ContentType = CV.ContentType;
                         await blob.UploadFromStreamAsync(streamReader.BaseStream);
                         application.CvUrl = blob.Uri.AbsoluteUri;
                     }
-                    
+                    SendEmail(name);
                     offer.JobApplications.Add(application);
                     context.JobApplications.Add(application);
                     await context.SaveChangesAsync();
@@ -68,6 +74,23 @@ namespace WebApp.Controllers
                 }
             }
             return View("~/Views/JobApplication/Form.cshtml", offer);
+        }
+
+        private async void SendEmail(string name)
+        {
+            var msg = new SendGridMessage();
+
+            msg.SetFrom(new EmailAddress("dx@example.com", "SendGrid WebApp"));
+
+            msg.AddTo(new EmailAddress("k.lapan@student.mini.pw.edu.pl", "Krzysztof Łapan"));
+
+            msg.SetSubject("New CV was sent to Azure Blob Storage!");
+
+            msg.AddContent(MimeType.Text, "Hello!\nNew CV named '" + name + "' was registered.");
+
+            var apiKey = _configuration.GetSection("SENDGRID_API_KEY").Value;
+            var client = new SendGridClient(apiKey);
+            await client.SendEmailAsync(msg);
         }
     }
 }
