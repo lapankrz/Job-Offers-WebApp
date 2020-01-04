@@ -37,25 +37,6 @@
     </button>
 </div>
 <hr />
-@*@if (Model.JobApplications.Count > 0)
-    {
-        <table style="width:50%">
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-            </tr>
-            @foreach (var m in Model.JobApplications)
-            {
-                <tr>
-                    <td>@m.FirstName @m.LastName</td>
-                    <td>@m.EmailAddress</td>
-                    <td>@m.PhoneNumber</td>
-                </tr>
-            }
-        </table>
-        <hr/>
-    }*@
 
 <table style="width:50%" id="app-table">
     <tr>
@@ -88,7 +69,8 @@
                     result += '<tr>';
                     result += '<td>' + app.firstName + ' ' + app.lastName + '</td>';
                     result += '<td>' + app.emailAddress + '</td>';
-                    result += '<td>' + app.phoneNumber +'</td>';
+                    result += '<td>' + app.phoneNumber + '</td>';
+                    result += '<td>' + '<a href="/apply/details/?id=' + app.id + '" class="text-primary"><i class="fas fa-info-circle"title="Details"></i></a></td>';
                     result += '</tr>';
                 });
                 $("#app-table").append(result);

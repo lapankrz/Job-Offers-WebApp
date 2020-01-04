@@ -59,24 +59,23 @@ namespace WebApp.Migrations
                     PhoneNumber = table.Column<string>(nullable: false),
                     EmailAddress = table.Column<string>(nullable: false),
                     ContactAgreement = table.Column<bool>(nullable: false),
-                    CvUrl = table.Column<string>(nullable: true),
-                    JobOfferId = table.Column<int>(nullable: true)
+                    CvUrl = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_JobApplications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_JobApplications_JobOffers_JobOfferId",
-                        column: x => x.JobOfferId,
+                        name: "FK_JobApplications_JobOffers_OfferId",
+                        column: x => x.OfferId,
                         principalTable: "JobOffers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_JobApplications_JobOfferId",
+                name: "IX_JobApplications_OfferId",
                 table: "JobApplications",
-                column: "JobOfferId");
+                column: "OfferId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_JobOffers_CompanyId",

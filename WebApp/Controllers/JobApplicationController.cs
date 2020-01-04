@@ -40,6 +40,15 @@ namespace WebApp.Controllers
             JobOffer offer = context.JobOffers.Include(o => o.Company).FirstOrDefault(o => o.Id == id);
             return View(offer);
         }
+        [HttpGet]
+        [Route("details")]
+        public IActionResult Details(int id)
+        {
+            JobApplication application = context.JobApplications.FirstOrDefault(o => o.Id == id);
+            JobOffer offer = context.JobOffers.Include(o => o.Company).FirstOrDefault(o => o.Id == application.OfferId);
+            ViewBag.offer = offer;
+            return View(application);
+        }
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public async Task<ActionResult> SaveForm([FromForm] JobApplication application, IFormFile CV)

@@ -1,0 +1,25 @@
+﻿@model JobApplication
+@{
+    ViewData["Title"] = "Details";
+    JobOffer offer = ViewBag.offer;
+}
+
+<div class="row">
+    <div class="col-sm-4 col-md-4 d-flex align-items-center py-2">
+        <button class="btn-sm btn-rounded btn-primary mr-3" name="backToIndex" onclick="location.href='@Url.Action("Details", "JobOffer", new { id = offer.Id })'">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <h2 class="font-weight-bold d-flex align-self-center my-auto">
+            Details
+        </h2>
+    </div>
+</div>
+<h3>
+    @Model.FirstName @Model.LastName
+</h3>
+<div>
+    <p><b>Job Offer: </b>@Html.ActionLink(offer.JobTitle + " (" + offer.Company.Name + ")", "Details", "JobOffer", new { id = offer.Id })</p>
+    <p><b>Phone Number: </b>@Model.PhoneNumber</p>
+    <p><b>Email: </b>@Model.EmailAddress</p>
+    <p><b>CV: </b><a href="@Model.CvUrl">Click</a></p>
+</div>

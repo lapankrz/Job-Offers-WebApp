@@ -10,7 +10,7 @@ using WebApp.EntityFramework;
 namespace WebApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200101182027_InitialMigration")]
+    [Migration("20200103133920_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,8 +50,6 @@ namespace WebApp.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired();
 
-                    b.Property<int?>("JobOfferId");
-
                     b.Property<string>("LastName")
                         .IsRequired();
 
@@ -62,7 +60,7 @@ namespace WebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JobOfferId");
+                    b.HasIndex("OfferId");
 
                     b.ToTable("JobApplications");
                 });
@@ -100,9 +98,10 @@ namespace WebApp.Migrations
 
             modelBuilder.Entity("WebApp.Models.JobApplication", b =>
                 {
-                    b.HasOne("WebApp.Models.JobOffer")
+                    b.HasOne("WebApp.Models.JobOffer", "Offer")
                         .WithMany("JobApplications")
-                        .HasForeignKey("JobOfferId");
+                        .HasForeignKey("OfferId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WebApp.Models.JobOffer", b =>
