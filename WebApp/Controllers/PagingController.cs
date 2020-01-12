@@ -19,12 +19,23 @@ namespace WebApp.Controllers
         {
             context = dataContext;
         }
+        /// <summary>
+        /// Searches the job offers with job titles containing the search text
+        /// </summary>
+        /// <param name="searchText">text to be searched for in job titles</param>
+        /// <returns>list of job offers with the search text in the job title</returns>
         [HttpGet]
         public IEnumerable<JobOffer> SearchJobOffers(string searchText)
         {
             var result = context.JobOffers.Include(o => o.Company).Where(o => o.JobTitle.ToLower().Contains(searchText)).ToList();
             return result;
         }
+        /// <summary>
+        /// Gets one page of job offers
+        /// </summary>
+        /// <param name="pageNo">the number of the page to be returned</param>
+        /// <param name="pageSize">size of the page in number of job offers</param>
+        /// <returns>page of job offers</returns>
         [HttpPost("{pageNo}")]
         public PagingViewModel GetJobOffers(int pageNo, int pageSize = 6)
         {
@@ -38,6 +49,5 @@ namespace WebApp.Controllers
             };
             return model;
         }
-
 }
 }

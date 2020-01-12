@@ -4,5 +4,164 @@
         <name>WebApp</name>
     </assembly>
     <members>
+        <member name="T:WebApp.Controllers.ApplicationApiController">
+            <summary>
+            api controller to get a list of job applications from the database
+            </summary>
+        </member>
+        <member name="F:WebApp.Controllers.ApplicationApiController.context">
+            <summary>
+            DataContext of the app
+            </summary>
+        </member>
+        <member name="M:WebApp.Controllers.ApplicationApiController.#ctor(WebApp.EntityFramework.DataContext)">
+            <summary>
+            Constructor for the controller
+            </summary>
+            <param name="dataContext">DataContext of the app</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApp.Controllers.ApplicationApiController.GetJobApplications(System.Int32)">
+            <summary>
+            Gets a list of job applications from the database
+            </summary>
+            <param name="id">id of the job offer for which the applications must be obtained</param>
+            <returns>list of job applications for the job offer</returns>
+        </member>
+        <member name="M:WebApp.Controllers.JobApplicationController.Form(System.Int32)">
+            <summary>
+            Opens a form for applying for a job
+            </summary>
+            <param name="id">id of the job offer for which the application will be created</param>
+            <returns>view with the form</returns>
+        </member>
+        <member name="M:WebApp.Controllers.JobApplicationController.Details(System.Int32)">
+            <summary>
+            Opens a page with details about a job application
+            </summary>
+            <param name="id">id of the job offer for which the applications is</param>
+            <returns>view with the details</returns>
+        </member>
+        <member name="M:WebApp.Controllers.JobApplicationController.SaveForm(WebApp.Models.JobApplication,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Validates the application form and saves it
+            </summary>
+            <param name="application">job application to be saved, obtained from the form</param>
+            <param name="CV">CV file uploaded by the user</param>
+            <returns>details view if the form was validated successfully or the form view to change the incorrect data</returns>
+        </member>
+        <member name="M:WebApp.Controllers.JobOfferController.Index(System.String)">
+            <summary>
+            Opens a page with index of all job offers
+            </summary>
+            <param name="search">search text to be parsed in the job title</param>
+            <returns>view with the job offers</returns>
+        </member>
+        <member name="M:WebApp.Controllers.JobOfferController.AddJobOffer">
+            <summary>
+            Opens a page with form to add a job offer
+            </summary>
+            <returns>view with the form</returns>
+        </member>
+        <member name="M:WebApp.Controllers.JobOfferController.SaveJobOffer(WebApp.Models.JobOffer)">
+            <summary>
+            Saves the job offer from the form
+            </summary>
+            <param name="offer">job offer to be saved, taken from the form</param>
+            <returns>view the index of the job offers or back to the view to correct the data</returns>
+        </member>
+        <member name="M:WebApp.Controllers.JobOfferController.Details(System.Int32)">
+            <summary>
+            Shows a view with details of a job offer
+            </summary>
+            <param name="id">id of the job offer, for which details should be shown</param>
+            <returns>view with the details</returns>
+        </member>
+        <member name="M:WebApp.Controllers.JobOfferController.DeleteOffer(System.Int32)">
+            <summary>
+            Deletes a job offer
+            </summary>
+            <param name="id">id of the job offer, which should be deleted</param>
+            <returns>view to the index of job offers</returns>
+        </member>
+        <member name="M:WebApp.Controllers.JobOfferController.EditJobOffer(System.Int32)">
+            <summary>
+            Shows a view with a form to edit a job offer
+            </summary>
+            <param name="id">id of the job offer, which should be changed</param>
+            <returns>view with the edit page</returns>
+        </member>
+        <member name="M:WebApp.Controllers.JobOfferController.EditSaveJobOffer(WebApp.Models.JobOffer)">
+            <summary>
+            Validates and saves the changed job offer
+            </summary>
+            <param name="offer">job offer that was changed</param>
+            <returns>view with the index or view to edit the incorrect data</returns>
+        </member>
+        <member name="M:WebApp.Controllers.PagingController.SearchJobOffers(System.String)">
+            <summary>
+            Searches the job offers with job titles containing the search text
+            </summary>
+            <param name="searchText">text to be searched for in job titles</param>
+            <returns>list of job offers with the search text in the job title</returns>
+        </member>
+        <member name="M:WebApp.Controllers.PagingController.GetJobOffers(System.Int32,System.Int32)">
+            <summary>
+            Gets one page of job offers
+            </summary>
+            <param name="pageNo">the number of the page to be returned</param>
+            <param name="pageSize">size of the page in number of job offers</param>
+            <returns>page of job offers</returns>
+        </member>
+        <member name="T:WebApp.Models.JobApplication">
+            <summary>
+            Job application class
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.JobApplication.Id">
+            <summary>
+            id of the application
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.JobApplication.OfferId">
+            <summary>
+            id of the job offer connected to the job application
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.JobApplication.Offer">
+            <summary>
+            object of class JobOffer, for which the application is
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.JobApplication.FirstName">
+            <summary>
+            First name of the applicant
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.JobApplication.LastName">
+            <summary>
+            Last name of the applicant
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.JobApplication.PhoneNumber">
+            <summary>
+            Phone number of the applicant
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.JobApplication.EmailAddress">
+            <summary>
+            Email address of the applicant
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.JobApplication.ContactAgreement">
+            <summary>
+            If the applicant toggled the contact agreement
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.JobApplication.CvUrl">
+            <summary>
+            URL of the CV of the applicant
+            </summary>
+        </member>
     </members>
 </doc>

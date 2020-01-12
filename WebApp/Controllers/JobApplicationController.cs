@@ -34,12 +34,22 @@ namespace WebApp.Controllers
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             container = blobClient.GetContainerReference("applications");
         }
+        /// <summary>
+        /// Opens a form for applying for a job
+        /// </summary>
+        /// <param name="id">id of the job offer for which the application will be created</param>
+        /// <returns>view with the form</returns>
         [HttpGet]
         public IActionResult Form(int id)
         {
             JobOffer offer = context.JobOffers.Include(o => o.Company).FirstOrDefault(o => o.Id == id);
             return View(offer);
         }
+        /// <summary>
+        /// Opens a page with details about a job application
+        /// </summary>
+        /// <param name="id">id of the job offer for which the applications is</param>
+        /// <returns>view with the details</returns>
         [HttpGet]
         [Route("details")]
         public IActionResult Details(int id)
@@ -49,8 +59,14 @@ namespace WebApp.Controllers
             ViewBag.offer = offer;
             return View(application);
         }
+        /// <summary>
+        /// Validates the application form and saves it
+        /// </summary>
+        /// <param name="application">job application to be saved, obtained from the form</param>
+        /// <param name="CV">CV file uploaded by the user</param>
+        /// <returns>details view if the form was validated successfully or the form view to change the incorrect data</returns>
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> SaveForm([FromForm] JobApplication application, IFormFile CV)
         {
             var offer = context.JobOffers.Include(o => o.Company).Include(o => o.JobApplications).FirstOrDefault(o => o.Id == application.OfferId);

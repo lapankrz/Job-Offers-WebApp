@@ -20,6 +20,11 @@ namespace WebApp.Controllers
         {
             context = dataContext;
         }
+        /// <summary>
+        /// Opens a page with index of all job offers
+        /// </summary>
+        /// <param name="search">search text to be parsed in the job title</param>
+        /// <returns>view with the job offers</returns>
         [Route("index")]
         [HttpGet]
         public IActionResult Index(string search)
@@ -29,13 +34,21 @@ namespace WebApp.Controllers
             else
                 return View(context.JobOffers.Include(o => o.Company).Where(o => o.JobTitle.ToLower().Contains(search.ToLower())).ToList());
         }
-        
+        /// <summary>
+        /// Opens a page with form to add a job offer
+        /// </summary>
+        /// <returns>view with the form</returns>
         [Route("Add")]
         public IActionResult AddJobOffer()
         {
             var companies = context.Companies.ToList();
             return View(companies);
         }
+        /// <summary>
+        /// Saves the job offer from the form
+        /// </summary>
+        /// <param name="offer">job offer to be saved, taken from the form</param>
+        /// <returns>view the index of the job offers or back to the view to correct the data</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SaveJobOffer(JobOffer offer)
@@ -51,15 +64,23 @@ namespace WebApp.Controllers
             }
             return View("AddJobOffer", context.Companies.ToList());
         }
-
+        /// <summary>
+        /// Shows a view with details of a job offer
+        /// </summary>
+        /// <param name="id">id of the job offer, for which details should be shown</param>
+        /// <returns>view with the details</returns>
         [Route("Details")]
         public IActionResult Details(int id)
         {
             var offer = context.JobOffers.Include(o => o.Company).FirstOrDefault(o => o.Id == id);
             return View(offer);
         }
-        
 
+        /// <summary>
+        /// Deletes a job offer
+        /// </summary>
+        /// <param name="id">id of the job offer, which should be deleted</param>
+        /// <returns>view to the index of job offers</returns>
         [Route("Delete")]
         public IActionResult DeleteOffer(int id)
         {
@@ -68,6 +89,11 @@ namespace WebApp.Controllers
             context.SaveChanges();
             return RedirectToAction("Index");
         }
+        /// <summary>
+        /// Shows a view with a form to edit a job offer
+        /// </summary>
+        /// <param name="id">id of the job offer, which should be changed</param>
+        /// <returns>view with the edit page</returns>
         [HttpGet]
         [Route("Edit")]
         public IActionResult EditJobOffer(int id)
@@ -76,6 +102,11 @@ namespace WebApp.Controllers
             ViewBag.companies = context.Companies.ToList();
             return View(offer);
         }
+        /// <summary>
+        /// Validates and saves the changed job offer
+        /// </summary>
+        /// <param name="offer">job offer that was changed</param>
+        /// <returns>view with the index or view to edit the incorrect data</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Edit")]
