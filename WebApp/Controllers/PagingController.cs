@@ -10,11 +10,18 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    /// <summary>
+    /// controller for paging
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class PagingController : ControllerBase
     {
         private readonly DataContext context;
+        /// <summary>
+        /// constructor for the controller
+        /// </summary>
+        /// <param name="dataContext">context for the database</param>
         public PagingController(DataContext dataContext)
         {
             context = dataContext;

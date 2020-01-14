@@ -9,18 +9,30 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    /// <summary>
+    /// controller for home page
+    /// </summary>
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="logger"></param>
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
+        /// <summary>
+        /// index view
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
-
+        
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

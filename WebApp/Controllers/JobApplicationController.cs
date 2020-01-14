@@ -18,6 +18,9 @@ using SendGrid.Helpers.Mail;
 
 namespace WebApp.Controllers
 {
+    /// <summary>
+    /// controller for displaying and modifying job applications
+    /// </summary>
     [Authorize]
     [Route("apply")]
     public class JobApplicationController : Controller
@@ -25,6 +28,11 @@ namespace WebApp.Controllers
         private readonly DataContext context;
         private readonly CloudBlobContainer container;
         private readonly IConfiguration _configuration;
+        /// <summary>
+        /// constructor for the controller
+        /// </summary>
+        /// <param name="dataContext">data context for the database</param>
+        /// <param name="configuration">configuration</param>
         public JobApplicationController(DataContext dataContext, IConfiguration configuration)
         {
             context = dataContext;

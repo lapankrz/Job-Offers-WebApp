@@ -38,6 +38,7 @@ namespace WebApp.Controllers
         /// Opens a page with form to add a job offer
         /// </summary>
         /// <returns>view with the form</returns>
+        [HttpGet]
         [Route("Add")]
         public IActionResult AddJobOffer()
         {
@@ -70,6 +71,7 @@ namespace WebApp.Controllers
         /// <param name="id">id of the job offer, for which details should be shown</param>
         /// <returns>view with the details</returns>
         [Route("Details")]
+        [HttpGet]
         public IActionResult Details(int id)
         {
             var offer = context.JobOffers.Include(o => o.Company).FirstOrDefault(o => o.Id == id);
@@ -82,6 +84,7 @@ namespace WebApp.Controllers
         /// <param name="id">id of the job offer, which should be deleted</param>
         /// <returns>view to the index of job offers</returns>
         [Route("Delete")]
+        [HttpPost]
         public IActionResult DeleteOffer(int id)
         {
             context.JobApplications.RemoveRange(context.JobApplications.Where(a => a.OfferId == id));
