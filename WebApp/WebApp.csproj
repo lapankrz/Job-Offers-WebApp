@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.1.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
     <PackageReference Include="bootstrap" Version="4.3.1" />
     <PackageReference Include="bootstrap.sass" Version="4.3.1" />
     <PackageReference Include="jQuery.Validation" Version="1.19.1" />
